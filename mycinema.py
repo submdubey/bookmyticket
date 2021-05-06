@@ -48,22 +48,22 @@ class Theater:
 
     def price_menu(self): #  prince calculation
         if self.Row*self.Col<= 60:  # if the seats are less than 60 price will be 10
-            for i in range(1,self.Row+1):
-                for j in range(1,self.Col+1):
+            for i in range(0,self.Row+1):
+                for j in range(0,self.Col+1):
                     a = {}
                     a[i,j] = 10
                     self.income.update(a)
         elif self.Row*self.Col>60:    # if the seats are less than 60 price will be 10
             c = self.Row//2
             b = self.Col//2
-            for i in range(1,self.Row+1):
+            for i in range(0,self.Row+1):
                 a = {}
-                for j in range(1,self.Col+1):
+                for j in range(0,self.Col+1):
                     a[i,j] = 8
                     self.income.update(a)
             for i in range((c+1),self.Row+1):
                 a = {}
-                for j in range(1, self.Col + 1):
+                for j in range(0, self.Col + 1):
                     a[i,j] = 10
                 self.income.update(a)
 
@@ -91,34 +91,47 @@ class Theater:
     def user_info(self,row,col):   # to get booked ticked user information
         self.getrow = row
         self.getcol = col
-        print('Name',self.user_details[int(self.getrow),int(self.getcol)][0])
-        print('Gender',self.user_details[int(self.getrow),int(self.getcol)][1])
-        print("Age: ", self.user_details[int(self.getrow), int(self.getcol)][2])
-        print("Mobile Number: ", self.user_details[int(self.getrow), int(self.getcol)][3])
-        print("Ticket Price: ", self.user_details[int(self.getrow), int(self.getcol)][4],"\n")
+        if (int(self.getrow) - 1, int(self.getcol) - 1) not in self.user_details:
+            print("\nPlease Enter The Correct Booked Seat Number\n")
+        else:
+            print('Name',self.user_details[int(self.getrow)-1,int(self.getcol)-1][0])
+            print('Gender',self.user_details[int(self.getrow)-1,int(self.getcol)-1][1])
+            print("Age: ", self.user_details[int(self.getrow)-1, int(self.getcol)-1][2])
+            print("Mobile Number: ", self.user_details[int(self.getrow)-1, int(self.getcol)-1][3])
+            print("Ticket Price: ", self.user_details[int(self.getrow)-1, int(self.getcol)-1][4],"\n")
 
     def buy_tickets(self,row,col): # for buying tickets
         self.buyrow = row
         self.buycol = col
-        if self.matrix[int(self.buyrow)][int(self.buycol)] == "B":  # IF THE SEAT IS ALREADY BOOKED
-            print("Seat Already Booked Book Another Seat" )  # IT WILL DISPLAY ALREADY BOOKED
-        else:  # IF THE SEAT IS VACANT IT WILL DISPLAY THE PRICE OF TICKET AND ASK FOR CONFIRMATION
-            print("Price Of The Ticket: ", self.income[(int(self.buyrow), int(self.buycol))])
-
+        if (int(self.buyrow), int(self.buycol)) not in self.income:
+            print("Please Enter The Correct Seat Number")
+        else:
+            if self.matrix[int(self.buyrow) - 1][int(self.buycol) - 1] == "B":  # IF THE SEAT IS ALREAYD BOOKED
+                print("Seat Already Booked Book Another Seat")  # IT WILL DSPLAY ALREADY BOOKED
+            else:  # IF THE SEAT IS VACANT IT WILL DISPLAY THE PRICE OF TICKET AND ASK FOR CONFIRMATION
+                print("Price Of The Ticket: ", self.income[(int(self.buyrow), int(self.buycol))])
             confirm = input('TO confirm your ticket please press Y\n')
             if confirm == 'Y':
                 a = {}
                 customer_name, customer_gender, customer_age, customer_phone = input(
                     "Enter Your Name ,Gender ,Age ,"
                     "Phone Number: \n").split()
-                a[int(self.buyrow), int(self.buycol)] = list((customer_name, customer_gender, int(customer_age),
+                a[int(self.buyrow)-1, int(self.buycol)-1] = list((customer_name, customer_gender, int(customer_age),
                                                               int(customer_phone),
                                                               self.income[(int(self.buyrow), int(self.buycol))]))
                 self.user_details.update(a)
-                self.matrix[int(self.buyrow)][int(self.buycol)] = "B"
+                self.matrix[int(self.buyrow)-1][int(self.buycol)-1] = "B"
                 print('Your booking is done successfully')
             else:
                 print('Your current booking is terminated')
+
+
+
+
+
+
+
+
 
 
 
